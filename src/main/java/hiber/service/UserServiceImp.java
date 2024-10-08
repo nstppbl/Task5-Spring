@@ -17,7 +17,12 @@ public class UserServiceImp implements UserService {
    @Transactional
    @Override
    public void add(User user) {
-      userDao.add(user);
+      if (userDao.findByEmail(user.getEmail()) == null) {
+         userDao.add(user);
+         System.out.println("Пользователь " + user.getFirstName() + " добавлен.");
+      } else {
+         System.out.println("Пользователь с таким email уже существует: " + user.getEmail());
+      }
    }
 
    @Transactional(readOnly = true)
@@ -25,5 +30,12 @@ public class UserServiceImp implements UserService {
    public List<User> listUsers() {
       return userDao.listUsers();
    }
+
+   @Transactional(readOnly = true)
+   @Override
+   public User getUserByCarModelAndSeries(String model, int series){
+      return userDao.getUserByCarModelAndSeries(model, series);
+   }
+
 
 }
